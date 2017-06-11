@@ -13,7 +13,7 @@ batch_size=60
 ##########################structure##########################
 layer = convolution2d('conv1', x_, 64)
 layer = max_pool(layer)
-layer = batch_norm_layer( layer , phase_train , 'conv1_bn')
+#layer = batch_norm_layer( layer , phase_train , 'conv1_bn')
 #top_conv = convolution2d('top_conv', x_, 128)
 #layer = max_pool(top_conv)
 layer=tf.contrib.layers.flatten(layer)
@@ -48,7 +48,7 @@ for step in range(max_iter):
         utils.write_acc_loss(f,train_acc,train_loss ,val_acc , val_loss)
         print '\n',val_acc, val_loss
         if val_acc > max_val:
-            saver.save(sess, './cnn_model/best_acc.ckpt')
+            saver.save(sess, './cnn_model/batch_norma.ckpt')
             print 'model was saved!'
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
     train_acc, train_loss, _ = sess.run([accuracy, cost, train_op], feed_dict={x_: batch_xs, y_: batch_ys , phase_train:True})
