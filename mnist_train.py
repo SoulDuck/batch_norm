@@ -8,6 +8,7 @@ import utils
 image_height, image_width, image_color_ch, n_classes, train_imgs, train_labs, test_imgs, test_labs = data.mnist_28x28()
 x_ = tf.placeholder(dtype=tf.float32, shape=[None, image_height, image_width, image_color_ch], name='x_')
 y_ = tf.placeholder(dtype=tf.int32, shape=[None, n_classes], name='y_')
+phase_train=tf.placeholder(dtype=tf.bool , name='phase_train')
 batch_size=60
 ##########################structure##########################
 layer = convolution2d('conv1', x_, 64)
@@ -46,3 +47,4 @@ for step in range(max_iter):
             print 'model was saved!'
     batch_xs, batch_ys = batch.next_batch(train_imgs, train_labs, batch_size)
     train_acc, train_loss, _ = sess.run([accuracy, cost, train_op], feed_dict={x_: batch_xs, y_: batch_ys})
+

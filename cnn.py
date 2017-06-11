@@ -6,6 +6,8 @@ import numpy as np
 import os , sys , glob
 from tensorflow.examples.tutorials.mnist import input_data
 
+
+
 def convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
     with tf.variable_scope(name) as scope:
         in_ch=x.get_shape()[-1]
@@ -25,6 +27,11 @@ def max_pool(x , k=3 , s=2 , padding='SAME'):
         print 'layer shape :',x.get_shape()
     return tf.nn.max_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
 
+def batch_norm(layer , phase_train):
+    batch_norm = tf.cond(phase_train,
+        lambda: tf.contrib.layers.batch_norm(layer, activation_fn=tf.nn.relu, is_training=True, reuse=None),
+        lambda: tf.contrib.layers.batch_norm(layer, activation_fn =tf.nn.relu, is_training=False, reuse=True))
+    return batch_norm
 
 def affine(name,x,out_ch ,keep_prob):
     with tf.variable_scope(name) as scope:
