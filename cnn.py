@@ -1,10 +1,5 @@
 import tensorflow as tf
-import data
-import random
-import numpy as np
-#import matplotlib.pyplot as plt
-import os , sys , glob
-from tensorflow.examples.tutorials.mnist import input_data
+from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 
 
@@ -27,12 +22,22 @@ def max_pool(x , k=3 , s=2 , padding='SAME'):
         print 'layer shape :',x.get_shape()
     return tf.nn.max_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
 
-def batch_norm(layer , phase_train):
-    batch_norm = tf.cond(phase_train,
-        lambda: tf.contrib.layers.batch_norm(layer, activation_fn=tf.nn.relu, is_training=True, reuse=None),
-        lambda: tf.contrib.layers.batch_norm(layer, activation_fn =tf.nn.relu, is_training=False, reuse=True))
-    return batch_norm
 
+def batch_norm_layer(x,train_phase,scope_bn):
+    bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
+    updates_collections=None,
+    is_training=True,
+    reuse=None, # is this right?
+    trainable=True,
+    scope=scope_bn)
+    bn_inference = batch_norm(x, decay=0.999, center=True, scale=True,
+    updates_collections=None,
+    is_training=False,
+    reuse=True, # is this right?
+    trainable=True,
+    scope=scope_bn)
+    z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
+    return z
 def affine(name,x,out_ch ,keep_prob):
     with tf.variable_scope(name) as scope:
         if len(x.get_shape())==4:

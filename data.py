@@ -1,5 +1,6 @@
-import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
+import random
+import numpy as np
 
 def mnist_28x28():
     mnist = input_data.read_data_sets('MNIST_DATA_SET', one_hot=True)
@@ -19,3 +20,9 @@ def mnist_28x28():
     test_imgs=mnist_test_imgs
     test_labs=mnist_test_labs
     return image_height , image_width , image_color_ch , n_classes, train_imgs , train_labs , test_imgs, test_labs
+
+def next_batch(imgs, labs , batch_size):
+    indices=random.sample(range(np.shape(imgs)[0]) , batch_size)
+    batch_xs=imgs[indices]
+    batch_ys=labs[indices]
+    return batch_xs , batch_ys
