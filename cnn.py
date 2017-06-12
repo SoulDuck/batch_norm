@@ -14,13 +14,25 @@ def convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
             print 'layer shape : ' ,layer.get_shape()
 
         return layer
+def convolution2d_manual(name,x,out_ch,k_h ,k_w , s=2 , padding='SAME'):
+    with tf.variable_scope(name) as scope:
+        in_ch=x.get_shape()[-1]
+        filter=tf.get_variable("w" , [k_h,k_w,in_ch , out_ch] , initializer=tf.contrib.layers.xavier_initializer())
+        bias=tf.Variable(tf.constant(0.1) , out_ch)
+        layer=tf.nn.conv2d(x , filter ,[1,s,s,1] , padding)+bias
+        layer=tf.nn.relu(layer , name='relu')
+        if __debug__ == True:
+            print 'layer shape : ' ,layer.get_shape()
 
-def max_pool(x , k=3 , s=2 , padding='SAME'):
+        return layer
 
-    if __debug__ ==True:
-        print 'layer name :'
-        print 'layer shape :',x.get_shape()
-    return tf.nn.max_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
+
+def max_pool(name , x , k=3 , s=2 , padding='SAME'):
+    with tf.variable_scope(name) as scope:
+        if __debug__ ==True:
+            print 'layer name :'
+            print 'layer shape :',x.get_shape()
+        return tf.nn.max_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
 
 
 def batch_norm_layer(x,train_phase,scope_bn):
