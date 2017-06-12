@@ -61,3 +61,9 @@ def reductionB(name , x):
         layer_join=tf.concat([layer_ , layer__ , layer___] , axis=3 , name='join')
 
     return layer_join
+def blockA(name , x):
+
+
+def blockB(name , x)
+
+def blockC(name , x)

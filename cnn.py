@@ -30,9 +30,15 @@ def convolution2d_manual(name,x,out_ch,k_h ,k_w , s=2 , padding='SAME'):
 def max_pool(name , x , k=3 , s=2 , padding='SAME'):
     with tf.variable_scope(name) as scope:
         if __debug__ ==True:
-            print 'layer name :'
+            print 'layer name :',name
             print 'layer shape :',x.get_shape()
         return tf.nn.max_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
+def avg_pool(name , x , k=3 , s=2 , padding='SAME'):
+    with tf.variable_scope(name) as scope:
+        if __debug__ ==True:
+            print 'layer name :',name
+            print 'layer shape :',x.get_shape()
+        return tf.nn.avg_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
 
 
 def batch_norm_layer(x,train_phase,scope_bn):
