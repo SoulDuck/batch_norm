@@ -70,21 +70,21 @@ def reductionB(name , x):
         print 'layer_shape :',layer_join.get_shape()
     return layer_join
 def blockB(name , x):
-    with tf.variable_scope() as scope:
+    with tf.variable_scope(name) as scope:
         layer=avg_pool('avg_pool', x, k=2 , s=1)
         layer=convolution2d('cnn',layer,128,k=1,s=1)
 
         layer_=convolution2d('cnn_0',x,384,k=1,s=1)
 
         layer__=convolution2d('cnn__0',x,192,k=1,s=1)
-        layer__ = convolution2d_manual('cnn__1', 224,layer__, 224, k_h=1 , k_w=7, s=1 )
-        layer__ = convolution2d_manual('cnn__2', 256,layer__, 224, k_h=1 , k_w=7, s=1 )
+        layer__ = convolution2d_manual('cnn__1', layer__, 224, k_h=1 , k_w=7, s=1 )
+        layer__ = convolution2d_manual('cnn__2', layer__, 256, k_h=1 , k_w=7, s=1 )
 
-        layer___=convolution2d('cnn___0',192,x,k=1,s=1)
-        layer___=convolution2d_manual('cnn___1',192,layer___,k_h=1,k_w=7,s=1)
-        layer___=convolution2d_manual('cnn___2',224,layer___,k_h=7,k_w=1,s=1)
-        layer___=convolution2d_manual('cnn___3',224,layer___,k_h=1,k_w=7,s=1)
-        layer___=convolution2d_manual('cnn___4',256,layer___,k_h=7,k_w=1,s=1)
+        layer___=convolution2d('cnn___0',x,192,k=1,s=1)
+        layer___=convolution2d_manual('cnn___1',layer___,192,k_h=1,k_w=7,s=1)
+        layer___=convolution2d_manual('cnn___2',layer___,224,k_h=7,k_w=1,s=1)
+        layer___=convolution2d_manual('cnn___3',layer___,224,k_h=1,k_w=7,s=1)
+        layer___=convolution2d_manual('cnn___4',layer___,256,k_h=7,k_w=1,s=1)
 
         layer_join=tf.concat([layer, layer_ , layer__ , layer___] , axis=3 , name ='join')
         print 'layer_name :','join'
@@ -99,11 +99,11 @@ def blockA(name , x):
         layer_ = convolution2d('cnn_0', x, 96, k=1, s=1)
 
         layer__ = convolution2d('cnn__0', x, 64, k=1, s=1)
-        layer__ = convolution2d('cnn__1', 96, layer__, k=3, s=1)
+        layer__ = convolution2d('cnn__1', layer__,96, k=3, s=1)
 
-        layer___ = convolution2d('cnn___0', 64, x, k=1, s=1)
-        layer___ = convolution2d_manual('cnn___1', 96, layer___, k=3, s=1)
-        layer___ = convolution2d_manual('cnn___2', 96, layer___, k=3, s=1)
+        layer___ = convolution2d('cnn___0', x,64, k=1, s=1)
+        layer___ = convolution2d('cnn___1',layer___,96, k=3, s=1)
+        layer___ = convolution2d('cnn___2',layer___,96, k=3, s=1)
 
         layer_join = tf.concat([layer, layer_, layer__, layer___], axis=3, name='join')
         print 'layer_name :', 'join'
@@ -121,11 +121,11 @@ def blockC(name , x):
         layer__0 = convolution2d_manual('cnn__1_0',layer__ , 256, x, k_h=1,k_w=3, s=1)
         layer__1 = convolution2d_manual('cnn__1_1',layer__ , 256, x, k_h=3,k_w=1, s=1)
 
-        layer___ = convolution2d('cnn___0', 384, x, k=1, s=1)
-        layer___ = convolution2d_manual('cnn___1', 448, layer___, k_h=1, k_w=3 ,s=1)
-        layer___ = convolution2d_manual('cnn___2', 512, layer___, k_h=3 , k_w=1, s=1)
-        layer___0 = convolution2d_manual('cnn___3_0', 256, layer___, k_h=3,k_w=1, s=1)
-        layer___1 = convolution2d_manual('cnn___3_1', 256, layer___, k_h=1,k_w=3, s=1)
+        layer___ = convolution2d('cnn___0', x,384 ,k=1, s=1)
+        layer___ = convolution2d_manual('cnn___1', layer___,448, k_h=1, k_w=3 ,s=1)
+        layer___ = convolution2d_manual('cnn___2', layer___,512, k_h=3 , k_w=1, s=1)
+        layer___0 = convolution2d_manual('cnn___3_0', layer___, 256, k_h=3,k_w=1, s=1)
+        layer___1 = convolution2d_manual('cnn___3_1', layer___,256, k_h=1,k_w=3, s=1)
     layer_join = tf.concat([layer, layer_, layer__0, layer__1 ,layer___0 , layer___1], axis=3, name='join')
     print 'layer_name :', 'join'
     print 'layer_shape :', layer_join.get_shape()

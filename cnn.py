@@ -11,6 +11,7 @@ def convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
         layer=tf.nn.conv2d(x , filter ,[1,s,s,1] , padding)+bias
         layer=tf.nn.relu(layer , name='relu')
         if __debug__ == True:
+            print 'layer name' , name
             print 'layer shape : ' ,layer.get_shape()
 
         return layer
@@ -22,6 +23,7 @@ def convolution2d_manual(name,x,out_ch,k_h ,k_w , s=2 , padding='SAME'):
         layer=tf.nn.conv2d(x , filter ,[1,s,s,1] , padding)+bias
         layer=tf.nn.relu(layer , name='relu')
         if __debug__ == True:
+            print 'layer name' ,name
             print 'layer shape : ' ,layer.get_shape()
 
         return layer
