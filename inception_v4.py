@@ -137,9 +137,9 @@ def blockC(name , x):
 
         layer_ = convolution2d('cnn_0', x, 256, k=1, s=1)
 
-        layer__ = convolution2d('cnn__0',x, 384, x, k=1, s=1)
-        layer__0 = convolution2d_manual('cnn__1_0',layer__ , 256, x, k_h=1,k_w=3, s=1)
-        layer__1 = convolution2d_manual('cnn__1_1',layer__ , 256, x, k_h=3,k_w=1, s=1)
+        layer__ = convolution2d('cnn__0',x, 384, k=1, s=1)
+        layer__0 = convolution2d_manual('cnn__1_0',layer__ , 256,  k_h=1,k_w=3, s=1)
+        layer__1 = convolution2d_manual('cnn__1_1',layer__ , 256,  k_h=3,k_w=1, s=1)
 
         layer___ = convolution2d('cnn___0', x,384 ,k=1, s=1)
         layer___ = convolution2d_manual('cnn___1', layer___,448, k_h=1, k_w=3 ,s=1)
