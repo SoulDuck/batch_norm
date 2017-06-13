@@ -1,2 +1,0 @@
-model_checkpoint_path: "batch_norma.ckpt"
-all_model_checkpoint_paths: "batch_norma.ckpt"
