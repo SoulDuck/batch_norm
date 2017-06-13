@@ -2,7 +2,7 @@ import tensorflow as tf
 from cnn  import convolution2d , max_pool , algorithm , affine , batch_norm_layer
 import data
 import utils
-from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC
+from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC ,resnet_blockA , resnet_blockB , resnet_blockC
 #from batch_normalization import batch_norm_layer
 ##########################setting############################
 
@@ -14,9 +14,9 @@ batch_size=60
 ##########################structure##########################
 #layer = convolution2d('conv1', x_, 64)
 #layer = max_pool(layer)
-layer=blockA('stem',x_)
-layer=blockB('stem_1',layer)
-layer=blockB('stem_2',layer)
+layer=resnet_blockA('stem',x_)
+layer=resnet_blockB('stem_1',layer)
+layer=resnet_blockC('stem_2',layer)
 
 #layer = batch_norm_layer( layer , phase_train , 'conv1_bn')
 #top_conv = convolution2d('top_conv', x_, 128)
