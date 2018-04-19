@@ -1,5 +1,5 @@
 import tensorflow as tf
-from cnn  import convolution2d , max_pool , algorithm , affine , batch_norm_layer
+from cnn  import convolution2d , max_pool , algorithm , affine , batch_norm_0 , batch_norm_1 , batch_norm_2
 import data
 import utils
 from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC ,resnet_blockA , resnet_blockB , resnet_blockC
