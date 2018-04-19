@@ -2,6 +2,7 @@ import tensorflow as tf
 from cnn  import convolution2d , max_pool , algorithm , affine , batch_norm_0 , batch_norm_1 , batch_norm_2
 import data
 import utils
+import os
 from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC ,resnet_blockA , resnet_blockB , resnet_blockC
 #from batch_normalization import batch_norm_layer
 ##########################setting############################
@@ -31,6 +32,9 @@ saver = tf.train.Saver()
 sess = tf.Session()
 init_op = tf.global_variables_initializer()
 sess.run(init_op)
+if os.path.isdir('./cnn_model'):
+    os.makedirs('./cnn_model')
+
 try:
     saver.restore(sess, './cnn_model/best_acc.ckpt')
     print 'model was restored!'
