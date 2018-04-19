@@ -1,5 +1,5 @@
 
-from cnn import convolution2d , batch_norm_layer , affine , max_pool , convolution2d_manual , avg_pool
+from cnn import convolution2d , affine , max_pool , convolution2d_manual , avg_pool , batch_norm_0 , batch_norm_1 , batch_norm_2
 import tensorflow as tf
 #ef convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
 def stem(name , x):
