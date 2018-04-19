@@ -54,7 +54,7 @@ for step in range(max_iter):
     utils.show_progress(step,max_iter)
     if step % check_point == 0:
         #inspect_cam(sess, cam, top_conv, test_imgs, test_labs, step, 50, x_, y_, y_conv)
-        val_acc, val_loss = sess.run([accuracy, cost], feed_dict={x_: test_imgs[:60], y_: test_labs[:60] , phase_train:False})
+        val_acc, val_loss = sess.run([accuracy, cost], feed_dict={x_: test_imgs[:200], y_: test_labs[:200] , phase_train:False})
         utils.write_acc_loss(f,train_acc,train_loss ,val_acc , val_loss)
         print 'train acc : {} , train loss {} '.format(train_acc ,train_loss)
         print '\n',val_acc, val_loss
