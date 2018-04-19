@@ -8,6 +8,11 @@ from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blo
 ##########################setting############################
 
 image_height, image_width, image_color_ch, n_classes, train_imgs, train_labs, test_imgs, test_labs = data.mnist_28x28()
+print np.max(train_imgs)
+print np.max(test_imgs)
+
+train_imgs=train_imgs/255.
+test_imgs=test_imgs/255.
 x_ = tf.placeholder(dtype=tf.float32, shape=[None, image_height, image_width, image_color_ch], name='x_')
 y_ = tf.placeholder(dtype=tf.int32, shape=[None, n_classes], name='y_')
 phase_train=tf.placeholder(dtype=tf.bool , name='phase_train')
