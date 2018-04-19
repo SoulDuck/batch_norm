@@ -43,7 +43,7 @@ def avg_pool(name , x , k=3 , s=2 , padding='SAME'):
         return tf.nn.avg_pool(x , ksize=[1,k,k,1] , strides=[1,s,s,1] , padding=padding)
 
 
-def batch_norm_layer(x,train_phase,scope_bn):
+def batch_norm_0(x,train_phase,scope_bn):
     bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
     updates_collections=None,
     is_training=True,
@@ -58,6 +58,57 @@ def batch_norm_layer(x,train_phase,scope_bn):
     scope=scope_bn)
     z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
     return z
+
+def batch_norm_1( _input , is_training):
+    output = tf.contrib.layers.batch_norm(_input, scale=True, \
+                                          is_training=is_training, updates_collections=None)
+    return output
+
+
+def batch_norm_2(self , name , x):
+    """
+
+    :param name:
+    :param x:
+    :return:
+    """
+    p_shape=[x.get_shape()[-1]]
+
+    with tf.variable_scope(name):
+        beta = tf.get_variable(name='beta', shape=p_shape, dtype=tf.float32, \
+                        initializer=tf.constant_initializer(0.0, tf.float32), trainable=False)
+
+
+        gamma = tf.get_variable(name='gamma', shape=p_shape, dtype=tf.float32, \
+                    initializer=tf.constant_initializer(1.0, tf.float32), trainable=False)
+
+
+    if self.mode == 'train':
+
+                mean , variance =tf.nn.moments(x , [0,1,2] , name = 'momnets')
+                moving_mean = tf.get_variable('moving_mean',shape=p_shape, dtype=tf.float32 ,\
+                                              initializer=tf.constant_initializer(0.0 , tf.float32))
+                moving_variance = tf.get_variable(name='moving_variance', shape=p_shape , dtype=tf.float32 ,\
+                                                  initializer=tf.constant_initializer(1.0 , tf.float32))
+
+                self._extra_train_ops.append(moving_averages.assign_moving_average(moving_mean , mean , 0.9))
+                self._extra_train_ops.append(moving_averages.assign_moving_average(moving_variance , variance , 0.9))
+
+    else:
+        mean = tf.get_variable(name = 'moving_mean' ,shape = p_shape , dtype = tf.float32 ,\
+                              initializer=tf.constant_initializer(0.0 , tf.float32), trainable=False)
+        variance = tf.get_variable(name = 'moving_variance', shape = p_shape , dtype = tf.float32 , \
+                                   initializer=tf.constant_initializer(1.0 , tf.float32) , trainable=False)
+
+        tf.summary.histogram(mean.op.name , mean)
+        tf.summary.histogram(variance.op.name , variance)
+
+    y=tf.nn.batch_normalization(x, mean , variance , beta , gamma , 0.001)
+    y.set_shape(x.get_shape())
+    return y
+
+
+
 def affine(name,x,out_ch ,keep_prob):
     with tf.variable_scope(name) as scope:
         if len(x.get_shape())==4:

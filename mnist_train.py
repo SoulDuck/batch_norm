@@ -17,7 +17,6 @@ batch_size=60
 layer=resnet_blockA('stem',x_)
 layer=resnet_blockB('stem_1',layer)
 layer=resnet_blockC('stem_2',layer)
-
 #layer = batch_norm_layer( layer , phase_train , 'conv1_bn')
 #top_conv = convolution2d('top_conv', x_, 128)
 #layer = max_pool(top_conv)
