@@ -123,7 +123,7 @@ def affine(name,x,out_ch ,keep_prob , phase_train):
         layer=tf.matmul(x , w_fc) + b_fc
 
         layer=tf.nn.relu(layer)
-        layer = tf.cond(phase_train, lambda: tf.nn.dropout(layer, self.keep_prob), lambda: layer)
+        layer = tf.cond(phase_train, lambda: tf.nn.dropout(layer, keep_prob), lambda: layer)
         print 'layer name :'
         print 'layer shape :',layer.get_shape()
         print 'layer dropout rate :',keep_prob
