@@ -17,7 +17,7 @@ batch_size=60
 layer = convolution2d('conv1', x_, 64)
 layer = max_pool(layer)
 layer = batch_norm_0( layer , phase_train , 'conv1_bn')
-top_conv = convolution2d('top_conv', x_, 128)
+top_conv = convolution2d('top_conv', layer, 128)
 layer = max_pool(top_conv)
 layer=tf.contrib.layers.flatten(layer)
 
@@ -25,8 +25,8 @@ layer=tf.contrib.layers.flatten(layer)
 #layer=reductionA('reductionA',layer)
 #layer=reductionB('reductionB',layer)
 print layer.get_shape()
-layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5)
-y_conv=logits('end_layer' , layer , n_classes , keep_prob=1.0)
+layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
+y_conv=logits('end_layer' , layer , n_classes , keep_prob=1.0 )
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
 pred, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 1)
@@ -56,10 +56,12 @@ for step in range(max_iter):
         #inspect_cam(sess, cam, top_conv, test_imgs, test_labs, step, 50, x_, y_, y_conv)
         val_acc, val_loss = sess.run([accuracy, cost], feed_dict={x_: test_imgs[:60], y_: test_labs[:60] , phase_train:False})
         utils.write_acc_loss(f,train_acc,train_loss ,val_acc , val_loss)
+        print 'train acc : {} , train loss {} '.format(train_acc ,train_loss)
         print '\n',val_acc, val_loss
         if val_acc > max_val:
             saver.save(sess, './cnn_model/batch_norma.ckpt')
             print 'model was saved!'
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
     train_acc, train_loss, _ = sess.run([accuracy, cost, train_op], feed_dict={x_: batch_xs, y_: batch_ys , phase_train:True})
+
 
