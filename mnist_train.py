@@ -16,7 +16,7 @@ batch_size=60
 ##########################structure##########################
 layer = convolution2d('conv1', x_, 64)
 layer = max_pool('max_pool1' , layer )
-layer = batch_norm_0( layer , phase_train , 'conv1_bn')
+#layer = batch_norm_0( layer , phase_train , 'conv1_bn')
 top_conv = convolution2d('top_conv', layer, 128)
 layer = max_pool('max_pool2', top_conv)
 layer=tf.contrib.layers.flatten(layer)
