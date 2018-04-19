@@ -3,6 +3,7 @@ from cnn  import convolution2d , max_pool , algorithm , affine , batch_norm_0 , 
 import data
 import utils
 import os
+import numpy as np
 from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC ,resnet_blockA , resnet_blockB , resnet_blockC
 #from batch_normalization import batch_norm_layer
 ##########################setting############################
