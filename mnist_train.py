@@ -19,7 +19,7 @@ layer = max_pool('max_pool1' , layer )
 #layer = batch_norm_0( layer , phase_train , 'conv1_bn')
 layer = convolution2d('top_conv', layer, 128)
 #layer = max_pool('max_pool2', top_conv)
-layer=tf.contrib.layers.flatten(layer)
+#layer=tf.contrib.layers.flatten(layer)
 
 #layer=resnet_blockA('stem',x_)
 #layer=reductionA('reductionA',layer)
@@ -44,7 +44,7 @@ except tf.errors.NotFoundError:
     print 'there was no model'
 ########################training##############################
 max_val = 0
-max_iter=4000
+max_iter=400000
 check_point = 50
 f=utils.make_log_txt()
 train_acc=0;train_loss=0;
