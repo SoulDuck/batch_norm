@@ -128,6 +128,25 @@ def affine(name,x,out_ch ,keep_prob):
         print 'layer shape :',layer.get_shape()
         print 'layer dropout rate :',keep_prob
         return layer
+
+def logits(name,x,out_ch ,keep_prob):
+    with tf.variable_scope(name) as scope:
+        if len(x.get_shape())==4:
+            batch, height , width , in_ch=x.get_shape().as_list()
+            w_fc=tf.get_variable('w' , [height*width*in_ch ,out_ch] , initializer= tf.contrib.layers.xavier_initializer())
+            x = tf.reshape(x, (-1, height * width * in_ch))
+        elif len(x.get_shape())==2:
+            batch, in_ch = x.get_shape().as_list()
+            w_fc=tf.get_variable('w' ,[in_ch ,out_ch] ,initializer=tf.contrib.layers.xavier_initializer())
+
+        b_fc=tf.Variable(tf.constant(0.1 ), out_ch)
+        layer=tf.matmul(x , w_fc) + b_fc
+        print 'layer name :'
+        print 'layer shape :',layer.get_shape()
+        print 'layer dropout rate :',keep_prob
+        return layer
+
+
 def gap(name,x , n_classes ):
     in_ch=x.get_shape()[-1]
     gap_x=tf.reduce_mean(x, (1,2))
