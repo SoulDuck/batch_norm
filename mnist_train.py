@@ -32,7 +32,7 @@ saver = tf.train.Saver()
 sess = tf.Session()
 init_op = tf.global_variables_initializer()
 sess.run(init_op)
-if os.path.isdir('./cnn_model'):
+if not os.path.isdir('./cnn_model'):
     os.makedirs('./cnn_model')
 
 try:
