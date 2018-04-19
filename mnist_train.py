@@ -10,7 +10,7 @@ image_height, image_width, image_color_ch, n_classes, train_imgs, train_labs, te
 x_ = tf.placeholder(dtype=tf.float32, shape=[None, image_height, image_width, image_color_ch], name='x_')
 y_ = tf.placeholder(dtype=tf.int32, shape=[None, n_classes], name='y_')
 phase_train=tf.placeholder(dtype=tf.bool , name='phase_train')
-batch_size=30
+batch_size=10
 ##########################structure##########################
 #layer = convolution2d('conv1', x_, 64)
 #layer = max_pool(layer)
