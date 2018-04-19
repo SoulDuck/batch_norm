@@ -109,7 +109,7 @@ def batch_norm_2(self , name , x):
 
 
 
-def affine(name,x,out_ch ,keep_prob):
+def affine(name,x,out_ch ,keep_prob , phase_train):
     with tf.variable_scope(name) as scope:
         if len(x.get_shape())==4:
             batch, height , width , in_ch=x.get_shape().as_list()
@@ -123,7 +123,7 @@ def affine(name,x,out_ch ,keep_prob):
         layer=tf.matmul(x , w_fc) + b_fc
 
         layer=tf.nn.relu(layer)
-        layer=tf.nn.dropout(layer , keep_prob)
+        layer = tf.cond(phase_train, lambda: tf.nn.dropout(_input, self.keep_prob), lambda: _input)
         print 'layer name :'
         print 'layer shape :',layer.get_shape()
         print 'layer dropout rate :',keep_prob
