@@ -9,25 +9,21 @@ from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blo
 ##########################setting############################
 
 image_height, image_width, image_color_ch, n_classes, train_imgs, train_labs, test_imgs, test_labs = data.mnist_28x28()
-print np.max(train_imgs)
-print np.max(test_imgs)
-
-train_imgs=train_imgs/255.
-test_imgs=test_imgs/255.
 x_ = tf.placeholder(dtype=tf.float32, shape=[None, image_height, image_width, image_color_ch], name='x_')
 y_ = tf.placeholder(dtype=tf.int32, shape=[None, n_classes], name='y_')
 phase_train=tf.placeholder(dtype=tf.bool , name='phase_train')
 batch_size=60
 ##########################structure##########################
-#layer = convolution2d('conv1', x_, 64)
-#layer = max_pool(layer)
-layer=resnet_blockA('stem',x_)
-layer=reductionA('reductionA',layer)
-layer=reductionB('reductionB',layer)
-#layer = batch_norm_layer( layer , phase_train , 'conv1_bn')
-#top_conv = convolution2d('top_conv', x_, 128)
-#layer = max_pool(top_conv)
+layer = convolution2d('conv1', x_, 64)
+layer = max_pool(layer)
+layer = batch_norm_0( layer , phase_train , 'conv1_bn')
+top_conv = convolution2d('top_conv', x_, 128)
+layer = max_pool(top_conv)
 layer=tf.contrib.layers.flatten(layer)
+
+#layer=resnet_blockA('stem',x_)
+#layer=reductionA('reductionA',layer)
+#layer=reductionB('reductionB',layer)
 print layer.get_shape()
 layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5)
 y_conv=logits('end_layer' , layer , n_classes , keep_prob=1.0)
