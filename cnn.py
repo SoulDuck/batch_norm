@@ -10,7 +10,8 @@ def convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
         tf.reduce_mean(filter ,)
         bias=tf.Variable(tf.constant(0.1) , out_ch)
         layer=tf.nn.conv2d(x , filter ,[1,s,s,1] , padding)+bias
-        tf.summary.scalar(name=name+'_summary', tensor=tf.reduce_mean(layer, axis=[1, 2, 3])[0])
+        summary_tensor=tf.reduce_mean(layer, axis=[1, 2, 3])[0] # 0th batch's mean
+        tf.summary.scalar(name=name+'_summary', tensor=summary_tensor)
         layer=tf.nn.relu(layer , name='relu')
         if __debug__ == True:
             print 'layer name' , name
@@ -123,9 +124,8 @@ def affine(name,x,out_ch ,keep_prob , phase_train):
 
         b_fc=tf.Variable(tf.constant(0.1 ), out_ch)
         layer=tf.matmul(x , w_fc) + b_fc
-        summary_tensor = tf.reduce_mean(layer , axis=1)[0]
+        summary_tensor = tf.reduce_mean(layer , axis=1)[0] # 0th batch's weigh's mean
         tf.summary.scalar(name=name+'_summary' ,tensor = tf.reduce_mean(layer , axis=1)[0])
-
         layer = tf.cond(phase_train, lambda: tf.nn.dropout(layer, keep_prob), lambda: layer)
         layer=tf.nn.relu(layer)
         print 'layer name :' , name

@@ -63,20 +63,24 @@ for step in range(max_iter):
     if step % check_point ==0 :
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
 
-            #check summary shape , and value
-            conv1_summary, topconv_summary, fc_summary = sess.run(
-                [conv1_summary_tensor, topconv_summary_tensor, fc_summary_tensor], feed_dict=test_feedDict)
-            print 'conv1 summary : ', conv1_summary
-            print 'topconv summary : ', topconv_summary
-            print 'FC summary : ', fc_summary
 
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                              y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
-            val_acc, val_loss, pred , summary= sess.run([accuracy , cost , pred_op , merged], feed_dict=test_feedDict)
-            writer.add_summary(summary , i)
+
+            # check summary shape , and value
+            val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
+
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
             pred_all.append(pred)
+        summary=sess.run(merged , feed_dict= test_feedDict)
+        writer.add_summary(summary, i)
+        conv1_summary, topconv_summary, fc_summary = sess.run(
+            [conv1_summary_tensor, topconv_summary_tensor, fc_summary_tensor], feed_dict=test_feedDict)
+        print 'conv1 summary : ', conv1_summary
+        print 'topconv summary : ', topconv_summary
+        print 'FC summary : ', fc_summary
+
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
         print val_acc_mean ,val_loss_mean
