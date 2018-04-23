@@ -107,9 +107,6 @@ for step in range(max_iter):
                           tf.Summary.Value(tag='Train batch_size 1  loss', simple_value=float(train_loss)),
                           tf.Summary.Value(tag='Train batch_size 1  acc', simple_value=float(train_acc))])
         writer.add_summary(summary, step)
-
-
-        print ''
         print 'Val accuracy and loss :', val_acc_mean ,val_loss_mean
 
     utils.show_progress(step,max_iter)
