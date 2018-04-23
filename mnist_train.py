@@ -27,6 +27,8 @@ layer = max_pool('max_pool1' , layer )
 layer = convolution2d('top_conv', layer, 128)
 layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
 y_conv=logits('end_layer' , layer , n_classes)
+
+
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
 pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 0.1)
@@ -36,7 +38,6 @@ init_op = tf.global_variables_initializer()
 sess.run(init_op)
 if not os.path.isdir('./cnn_model'):
     os.makedirs('./cnn_model')
-
 try:
     saver.restore(sess, './cnn_model/best_acc.ckpt')
     print 'model was restored!'

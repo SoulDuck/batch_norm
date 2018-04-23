@@ -7,8 +7,10 @@ def convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
     with tf.variable_scope(name) as scope:
         in_ch=x.get_shape()[-1]
         filter=tf.get_variable("w" , [k,k,in_ch , out_ch] , initializer=tf.contrib.layers.xavier_initializer())
+        tf.reduce_mean(filter ,)
         bias=tf.Variable(tf.constant(0.1) , out_ch)
         layer=tf.nn.conv2d(x , filter ,[1,s,s,1] , padding)+bias
+        tf.summary.histogram(name=name, values=tf.reduce_mean(layer, axis=[1, 2, 3]))
         layer=tf.nn.relu(layer , name='relu')
         if __debug__ == True:
             print 'layer name' , name
@@ -122,9 +124,10 @@ def affine(name,x,out_ch ,keep_prob , phase_train):
         b_fc=tf.Variable(tf.constant(0.1 ), out_ch)
         layer=tf.matmul(x , w_fc) + b_fc
 
+
         layer = tf.cond(phase_train, lambda: tf.nn.dropout(layer, keep_prob), lambda: layer)
         layer=tf.nn.relu(layer)
-        print 'layer name :'
+        print 'layer name :' , name
         print 'layer shape :',layer.get_shape()
         print 'layer dropout rate :',keep_prob
         return layer
@@ -141,7 +144,7 @@ def logits(name,x,out_ch):
 
         b_fc=tf.Variable(tf.constant(0.1 ), out_ch)
         layer=tf.matmul(x , w_fc) + b_fc
-        print 'layer name :'
+        print 'layer name : logits '
         print 'layer shape :',layer.get_shape()
         return layer
 
