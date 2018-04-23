@@ -72,20 +72,19 @@ for step in range(max_iter):
             pred_all.append(pred)
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
-        print 'Val accuracy and loss :', val_acc_mean, val_loss_mean
-        print ''
         summary=sess.run(merged , feed_dict= test_feedDict)
         writer.add_summary(summary, step)
         conv1_summary, topconv_summary, fc_summary = sess.run(
             [conv1_summary_tensor, topconv_summary_tensor, fc_summary_tensor], feed_dict=test_feedDict)
-        print 'conv1 summary : ', conv1_summary
-        print 'topconv summary : ', topconv_summary
-        print 'FC summary : ', fc_summary
+        #print 'conv1 summary : ', conv1_summary
+        #print 'topconv summary : ', topconv_summary
+        #print 'FC summary : ', fc_summary
         summary=tf.Summary(value=[tf.Summary.Value(tag='Test batch : {} loss'.format(batch_size), simple_value=float(val_loss_mean)),
                           tf.Summary.Value(tag='Test batch : {} acc'.format(batch_size), simple_value=float(val_acc_mean)),
                           tf.Summary.Value(tag='Train batch : {} loss'.format(batch_size), simple_value=float(train_loss)),
                           tf.Summary.Value(tag='Train batch : {} acc'.format(batch_size), simple_value=float(train_acc))])
         writer.add_summary(summary, step)
+        print 'Val accuracy and loss :', val_acc_mean, val_loss_mean
 
         val_acc_mean, val_loss_mean, pred_all = [], [], []
         # validation batch size 을 1 로 합니다
