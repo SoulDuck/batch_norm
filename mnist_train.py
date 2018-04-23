@@ -79,6 +79,12 @@ for step in range(max_iter):
 
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
+        summary=tf.Summary(value=[tf.Summary.Value(tag='Test loss', simple_value=float(val_loss_mean)),
+                          tf.Summary.Value(tag='Test acc', simple_value=float(val_acc_mean)),
+                          tf.Summary.Value(tag='Train loss', simple_value=float(train_loss)),
+                          tf.Summary.Value(tag='Train acc', simple_value=float(train_acc))])
+        writer.add_summary(summary, step)
+
         print val_acc_mean ,val_loss_mean
         print train_acc , train_loss
 
