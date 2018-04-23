@@ -74,7 +74,7 @@ for step in range(max_iter):
             val_loss_mean.append(val_loss)
             pred_all.append(pred)
         summary=sess.run(merged , feed_dict= test_feedDict)
-        writer.add_summary(summary, i)
+        writer.add_summary(summary, step)
         conv1_summary, topconv_summary, fc_summary = sess.run(
             [conv1_summary_tensor, topconv_summary_tensor, fc_summary_tensor], feed_dict=test_feedDict)
         print 'conv1 summary : ', conv1_summary
