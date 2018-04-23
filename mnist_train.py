@@ -59,7 +59,7 @@ for step in range(max_iter):
 
     if step % check_point ==0 :
         # train 과 batch size 을 똑같이 하고 평가합니다
-        batch_size=60
+
         print 'Validation Batch Size : {} '.format(batch_size)
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
@@ -87,10 +87,10 @@ for step in range(max_iter):
         val_acc_mean, val_loss_mean, pred_all = [], [], []
         # validation batch size 을 1 로 합니다
         print 'Validation Batch Size : 1 '
-        for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
 
-            test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
-                             y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
+        for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
+            test_feedDict = {x_: test_imgs[i :(i + 1)],
+                             y_: test_labs[i :(i + 1)], phase_train: False}
             print np.shape( test_imgs[i * batch_size:(i + 1) * batch_size])
             # check summary shape , and value
             val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
