@@ -29,7 +29,7 @@ layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_t
 y_conv=logits('end_layer' , layer , n_classes)
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
-pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 1)
+pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 0.1)
 saver = tf.train.Saver()
 sess = tf.Session()
 init_op = tf.global_variables_initializer()
@@ -68,7 +68,7 @@ for step in range(max_iter):
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
         print val_acc_mean ,val_loss_mean
-        print train_acc , train_loss
+        print train_acc , train_lossK
 
     utils.show_progress(step,max_iter)
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
