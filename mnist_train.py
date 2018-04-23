@@ -29,7 +29,7 @@ layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_t
 y_conv=logits('end_layer' , layer , n_classes , keep_prob=1.0 )
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
-pred, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 1)
+pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 1)
 saver = tf.train.Saver()
 sess = tf.Session()
 init_op = tf.global_variables_initializer()
@@ -58,7 +58,7 @@ for step in range(max_iter):
     for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
         test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                          y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
-        val_acc, val_loss, pred = sess.run([accuracy , cost , pred], feed_dict=test_feedDict)
+        val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op], feed_dict=test_feedDict)
         val_acc_mean.append(val_acc)
         val_loss_mean.append(val_loss)
         pred_all.append(pred)
