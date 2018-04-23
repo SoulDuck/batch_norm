@@ -62,14 +62,10 @@ for step in range(max_iter):
 
     if step % check_point ==0 :
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
-
-
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                              y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
-
             # check summary shape , and value
             val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
-
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
             pred_all.append(pred)
@@ -89,5 +85,4 @@ for step in range(max_iter):
     utils.show_progress(step,max_iter)
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
     train_acc, train_loss, _ = sess.run([accuracy, cost, train_op], feed_dict={x_: batch_xs, y_: batch_ys , phase_train:True})
-
 
