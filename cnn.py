@@ -129,7 +129,7 @@ def affine(name,x,out_ch ,keep_prob , phase_train):
         print 'layer dropout rate :',keep_prob
         return layer
 
-def logits(name,x,out_ch ,keep_prob):
+def logits(name,x,out_ch):
     with tf.variable_scope(name) as scope:
         if len(x.get_shape())==4:
             batch, height , width , in_ch=x.get_shape().as_list()
@@ -143,7 +143,6 @@ def logits(name,x,out_ch ,keep_prob):
         layer=tf.matmul(x , w_fc) + b_fc
         print 'layer name :'
         print 'layer shape :',layer.get_shape()
-        print 'layer dropout rate :',keep_prob
         return layer
 
 
