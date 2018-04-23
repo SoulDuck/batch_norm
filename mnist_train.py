@@ -59,6 +59,7 @@ for step in range(max_iter):
 
     if step % check_point ==0 :
         # train 과 batch size 을 똑같이 하고 평가합니다
+        batch_size=60
         print 'Validation Batch Size : {} '.format(batch_size)
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
@@ -75,6 +76,13 @@ for step in range(max_iter):
         print 'conv1 summary : ', conv1_summary
         print 'topconv summary : ', topconv_summary
         print 'FC summary : ', fc_summary
+        summary=tf.Summary(value=[tf.Summary.Value(tag='Test batch : {} loss'.format(batch_size), simple_value=float(val_loss_mean)),
+                          tf.Summary.Value(tag='Test batch : {} acc'.format(batch_size), simple_value=float(val_acc_mean)),
+                          tf.Summary.Value(tag='Train batch : {} loss'.format(batch_size), simple_value=float(train_loss)),
+                          tf.Summary.Value(tag='Train batch : {} acc'.format(batch_size), simple_value=float(train_acc))])
+        writer.add_summary(summary, step)
+
+
 
         # validation batch size 을 1 로 합니다
         print 'Validation Batch Size : 1 '
@@ -89,12 +97,10 @@ for step in range(max_iter):
             pred_all.append(pred)
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
-
-
-        summary=tf.Summary(value=[tf.Summary.Value(tag='Test loss', simple_value=float(val_loss_mean)),
-                          tf.Summary.Value(tag='Test acc', simple_value=float(val_acc_mean)),
-                          tf.Summary.Value(tag='Train loss', simple_value=float(train_loss)),
-                          tf.Summary.Value(tag='Train acc', simple_value=float(train_acc))])
+        summary=tf.Summary(value=[tf.Summary.Value(tag='Test batch_size 1 loss', simple_value=float(val_loss_mean)),
+                          tf.Summary.Value(tag='Test batch_size 1  acc', simple_value=float(val_acc_mean)),
+                          tf.Summary.Value(tag='Train batch_size 1  loss', simple_value=float(train_loss)),
+                          tf.Summary.Value(tag='Train batch_size 1  acc', simple_value=float(train_acc))])
         writer.add_summary(summary, step)
 
         print 'Train accuracy and loss :',train_acc , train_loss
