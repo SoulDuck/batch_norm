@@ -91,7 +91,7 @@ for step in range(max_iter):
         for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i :(i + 1)],
                              y_: test_labs[i :(i + 1)], phase_train: False}
-            print np.shape( test_imgs[i * batch_size:(i + 1) * batch_size])
+            #print np.shape( test_imgs[i * batch_size:(i + 1) * batch_size])
             # check summary shape , and value
             val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
             val_acc_mean.append(val_acc)
