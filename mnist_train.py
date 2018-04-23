@@ -29,7 +29,7 @@ layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_t
 y_conv=logits('end_layer' , layer , n_classes)
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
-pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 0.1)
+pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 1)
 saver = tf.train.Saver()
 sess = tf.Session()
 init_op = tf.global_variables_initializer()
