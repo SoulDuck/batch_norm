@@ -68,7 +68,7 @@ for step in range(max_iter):
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
         print val_acc_mean ,val_loss_mean
-        print train_acc , train_lossK
+        print train_acc , train_loss
 
     utils.show_progress(step,max_iter)
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
