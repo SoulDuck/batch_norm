@@ -53,8 +53,9 @@ train_acc=0;train_loss=0;
 
 share=len(test_labs)/batch_size
 remainder=len(test_labs)/batch_size
-val_acc_mean, val_loss_mean  , pred_all = [], [] , []
+
 for step in range(max_iter):
+    val_acc_mean, val_loss_mean, pred_all = [], [], []
     for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
         test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                          y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
