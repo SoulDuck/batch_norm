@@ -5,7 +5,6 @@ import utils
 import os
 import numpy as np
 from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC ,resnet_blockA , resnet_blockB , resnet_blockC
-#from batch_normalization import batch_norm_layer
 ##########################setting############################
 
 image_height, image_width, image_color_ch, n_classes, train_imgs, train_labs, test_imgs, test_labs = data.mnist_28x28()
@@ -14,17 +13,17 @@ y_ = tf.placeholder(dtype=tf.int32, shape=[None, n_classes], name='y_')
 phase_train=tf.placeholder(dtype=tf.bool , name='phase_train')
 batch_size=60
 ##########################structure##########################
-layer = convolution2d('conv1', x_, 64)
-layer = max_pool('max_pool1' , layer )
-#layer = batch_norm_0( layer , phase_train , 'conv1_bn')
-layer = convolution2d('top_conv', layer, 128)
+
+
 #layer = max_pool('max_pool2', top_conv)
 #layer=tf.contrib.layers.flatten(layer)
 
 #layer=resnet_blockA('stem',x_)
 #layer=reductionA('reductionA',layer)
 #layer=reductionB('reductionB',layer)
-print layer.get_shape()
+layer = convolution2d('conv1', x_, 64)
+layer = max_pool('max_pool1' , layer )
+layer = convolution2d('top_conv', layer, 128)
 layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
 y_conv=logits('end_layer' , layer , n_classes , keep_prob=1.0 )
 #############################################################
@@ -46,21 +45,27 @@ except tf.errors.NotFoundError:
 max_val = 0
 max_iter=400000
 check_point = 50
+batch_size = 60
 f=utils.make_log_txt()
 train_acc=0;train_loss=0;
-feed_test={x_: test_imgs[:200], y_: test_labs[:200]}
-feed_train={x_: test_imgs[:200], y_: test_labs[:200]}
+
+
+share=len(test_labs)/batch_size
+remainder=len(test_labs)/batch_size
+val_acc_mean, val_loss_mean  = [], []
 for step in range(max_iter):
+    for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
+        test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
+                         y_: test_labs[i * batch_size:(i + 1) * batch_size], is_training: False}
+        val_acc, val_loss, pred = sess.run(fetches=test_fetches, feed_dict=test_feedDict)
+        val_acc_mean.append(val_acc)
+        val_loss_mean.append(val_loss)
+        pred_all.append(pred)
+
+    val_acc_mean = np.mean(np.asarray(val_acc_mean))
+    val_loss_mean = np.mean(np.asarray(val_loss_mean))
+
     utils.show_progress(step,max_iter)
-    if step % check_point == 0:
-        #inspect_cam(sess, cam, top_conv, test_imgs, test_labs, step, 50, x_, y_, y_conv)
-        val_acc, val_loss = sess.run([accuracy, cost], feed_dict={x_: test_imgs[:1000], y_: test_labs[:1000] , phase_train:False})
-        utils.write_acc_loss(f,train_acc,train_loss ,val_acc , val_loss)
-        print 'train acc : {} , train loss {} '.format(train_acc ,train_loss)
-        print '\n',val_acc, val_loss
-        if val_acc > max_val:
-            saver.save(sess, './cnn_model/batch_norma.ckpt')
-            print 'model was saved!'
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
     train_acc, train_loss, _ = sess.run([accuracy, cost, train_op], feed_dict={x_: batch_xs, y_: batch_ys , phase_train:True})
 
