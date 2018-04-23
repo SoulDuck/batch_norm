@@ -27,11 +27,13 @@ layer = max_pool('max_pool1' , layer )
 layer = convolution2d('top_conv', layer, 128)
 layer = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
 y_conv=logits('end_layer' , layer , n_classes)
-
+merged = tf.summary.merge_all()
 
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
 pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 0.1)
+writer=tf.summary.FileWriter(logdir='./logs')
+writer.add_graph(graph = tf.get_default_graph())
 saver = tf.train.Saver()
 sess = tf.Session()
 init_op = tf.global_variables_initializer()
@@ -60,9 +62,11 @@ for step in range(max_iter):
 
     if step % check_point ==0 :
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
+
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                              y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
-            val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op], feed_dict=test_feedDict)
+            val_acc, val_loss, pred , summary= sess.run([accuracy , cost , pred_op , merged], feed_dict=test_feedDict)
+            wrtier.add_summary(summary , i)
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
             pred_all.append(pred)
