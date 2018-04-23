@@ -44,7 +44,7 @@ except tf.errors.NotFoundError:
     print 'there was no model'
 ########################training##############################
 max_val = 0
-max_iter=40000
+max_iter=7000
 check_point = 50
 batch_size = 60
 f=utils.make_log_txt()
@@ -58,6 +58,8 @@ for step in range(max_iter):
     val_acc_mean, val_loss_mean, pred_all = [], [], []
 
     if step % check_point ==0 :
+        # train 과 batch size 을 똑같이 하고 평가합니다
+        print 'Validation Batch Size : {} '.format(batch_size)
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                              y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
@@ -74,16 +76,29 @@ for step in range(max_iter):
         print 'topconv summary : ', topconv_summary
         print 'FC summary : ', fc_summary
 
+        # validation batch size 을 1 로 합니다
+        print 'Validation Batch Size : 1 '
+        for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
+
+            test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
+                             y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
+            # check summary shape , and value
+            val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
+            val_acc_mean.append(val_acc)
+            val_loss_mean.append(val_loss)
+            pred_all.append(pred)
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
+
+
         summary=tf.Summary(value=[tf.Summary.Value(tag='Test loss', simple_value=float(val_loss_mean)),
                           tf.Summary.Value(tag='Test acc', simple_value=float(val_acc_mean)),
                           tf.Summary.Value(tag='Train loss', simple_value=float(train_loss)),
                           tf.Summary.Value(tag='Train acc', simple_value=float(train_acc))])
         writer.add_summary(summary, step)
 
-        print val_acc_mean ,val_loss_mean
-        print train_acc , train_loss
+        print 'Train accuracy and loss :',train_acc , train_loss
+        print 'Val accuracy and loss :', val_acc_mean ,val_loss_mean
 
     utils.show_progress(step,max_iter)
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
