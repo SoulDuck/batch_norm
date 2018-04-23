@@ -59,7 +59,8 @@ for step in range(max_iter):
 
     if step % check_point ==0 :
         # train 과 batch size 을 똑같이 하고 평가합니다
-
+        print 'Train accuracy and loss :', train_acc, train_loss
+        print ''
         print 'Validation Batch Size : {} '.format(batch_size)
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
@@ -71,7 +72,6 @@ for step in range(max_iter):
             pred_all.append(pred)
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
-        print ''
         print 'Val accuracy and loss :', val_acc_mean, val_loss_mean
         print ''
         summary=sess.run(merged , feed_dict= test_feedDict)
@@ -108,7 +108,7 @@ for step in range(max_iter):
                           tf.Summary.Value(tag='Train batch_size 1  acc', simple_value=float(train_acc))])
         writer.add_summary(summary, step)
 
-        print 'Train accuracy and loss :',train_acc , train_loss
+
         print ''
         print 'Val accuracy and loss :', val_acc_mean ,val_loss_mean
 
