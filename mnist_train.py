@@ -84,8 +84,7 @@ for step in range(max_iter):
                           tf.Summary.Value(tag='Train batch : {} acc'.format(batch_size), simple_value=float(train_acc))])
         writer.add_summary(summary, step)
 
-
-
+        val_acc_mean, val_loss_mean, pred_all = [], [], []
         # validation batch size 을 1 로 합니다
         print 'Validation Batch Size : 1 '
         for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
