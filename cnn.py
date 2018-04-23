@@ -16,7 +16,7 @@ def convolution2d(name,x,out_ch,k=3 , s=2 , padding='SAME'):
             print 'layer name' , name
             print 'layer shape : ' ,layer.get_shape()
 
-        return layer
+        return layer , summary_tensor
 def convolution2d_manual(name,x,out_ch,k_h ,k_w , s=2 , padding='SAME'):
     with tf.variable_scope(name) as scope:
         in_ch=x.get_shape()[-1]
@@ -123,7 +123,7 @@ def affine(name,x,out_ch ,keep_prob , phase_train):
 
         b_fc=tf.Variable(tf.constant(0.1 ), out_ch)
         layer=tf.matmul(x , w_fc) + b_fc
-        print tf.reduce_mean(layer , axis=1)
+        summary_tensor = tf.reduce_mean(layer , axis=1)[0]
         tf.summary.scalar(name=name+'_summary' ,tensor = tf.reduce_mean(layer , axis=1)[0])
 
         layer = tf.cond(phase_train, lambda: tf.nn.dropout(layer, keep_prob), lambda: layer)
@@ -131,7 +131,7 @@ def affine(name,x,out_ch ,keep_prob , phase_train):
         print 'layer name :' , name
         print 'layer shape :',layer.get_shape()
         print 'layer dropout rate :',keep_prob
-        return layer
+        return layer , summary_tensor
 
 def logits(name,x,out_ch):
     with tf.variable_scope(name) as scope:

@@ -66,7 +66,7 @@ for step in range(max_iter):
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                              y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
             val_acc, val_loss, pred , summary= sess.run([accuracy , cost , pred_op , merged], feed_dict=test_feedDict)
-            wrtier.add_summary(summary , i)
+            writer.add_summary(summary , i)
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
             pred_all.append(pred)
