@@ -86,6 +86,8 @@ for step in range(max_iter):
 
         val_acc_mean, val_loss_mean, pred_all = [], [], []
         # validation batch size 을 1 로 합니다
+        print 'Val accuracy and loss :', val_acc_mean ,val_loss_mean
+
         print 'Validation Batch Size : 1 '
 
         for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
