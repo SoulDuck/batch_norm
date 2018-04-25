@@ -17,12 +17,13 @@ batch_size=60
 ##########################structure##########################
 
 layer , conv1_summary_tensor  = convolution2d('conv1', x_, 64)
+layer = batch_norm_1(layer, phase_train, 'bn0')
 #layer = batch_norm_1(layer, phase_train, 'bn0')
 layer = max_pool('max_pool1' , layer )
 layer , topconv_summary_tensor = convolution2d('top_conv', layer, 128)
 #layer = batch_norm_1(layer, phase_train, 'bn1')
 layer , fc_summary_tensor = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
-layer = batch_norm_1(layer, phase_train, 'bn2')
+#layer = batch_norm_1(layer, phase_train, 'bn2')
 y_conv=logits('end_layer' , layer , n_classes)
 
 merged = tf.summary.merge_all()
