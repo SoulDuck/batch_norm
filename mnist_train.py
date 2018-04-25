@@ -5,6 +5,7 @@ import data
 import utils
 import os
 import numpy as np
+import utils
 from inception_v4 import  stem  , stem_1 , stem_2 , reductionB , reductionA ,blockA , blockB ,blockC ,resnet_blockA , resnet_blockB , resnet_blockC
 ##########################setting############################
 
@@ -70,7 +71,8 @@ for step in range(max_iter):
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
             pred_all.append(pred)
-        val_acc_mean = np.mean(np.asarray(val_acc_mean))
+
+        val_acc = utils.get_acc(test_labs, pred_all)
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
         summary=sess.run(merged , feed_dict= test_feedDict)
         writer.add_summary(summary, step)
