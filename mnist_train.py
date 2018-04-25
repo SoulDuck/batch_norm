@@ -72,7 +72,7 @@ for step in range(max_iter):
             val_loss_mean.append(val_loss)
             pred_all.extend(preds)
 
-        val_acc = utils.get_acc(test_labs, pred_all)
+        val_acc_mean = utils.get_acc(test_labs, pred_all)
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
         summary=sess.run(merged , feed_dict= test_feedDict)
         writer.add_summary(summary, step)
