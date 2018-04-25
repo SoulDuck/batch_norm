@@ -30,6 +30,5 @@ def get_acc(true , pred):
         pred_cls = np.argmax(pred, axis=1)
 
     tmp=[true_cls == pred_cls]
-    print np.sum(tmp)
     acc=np.sum(tmp) / float(len(true_cls))
     return acc
