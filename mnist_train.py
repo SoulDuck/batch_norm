@@ -70,8 +70,8 @@ for step in range(max_iter):
             val_acc, val_loss, preds = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
             val_loss_mean.append(val_loss)
             pred_all.extend(preds)
-        test_feedDict = {x_: test_imgs[i * batch_size:],
-                         y_: test_labs[i * batch_size:], phase_train: False}
+        test_feedDict = {x_: test_imgs[(i+1)* batch_size:],
+                         y_: test_labs[(i+1) * batch_size:], phase_train: False}
         val_acc, val_loss, preds = sess.run([accuracy, cost, pred_op], feed_dict=test_feedDict)
         val_loss_mean.append(val_loss)
         pred_all.extend(preds)
