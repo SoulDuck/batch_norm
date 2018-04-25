@@ -158,9 +158,9 @@ def algorithm(y_conv , y_ , learning_rate):
     pred=tf.nn.softmax(y_conv , name='softmax')
     pred_cls=tf.argmax(pred , axis=1 , name='pred_cls')
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y_conv , labels=y_) , name='cost')
-    update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
-    with tf.control_dependencies(update_ops):
-        train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+    #update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+    #with tf.control_dependencies(update_ops):
+    train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
 
     correct_pred=tf.equal(tf.argmax(y_conv , 1) , tf.argmax(y_ , 1) , name='correct_pred')
     accuracy =  tf.reduce_mean(tf.cast(correct_pred , dtype=tf.float32) , name='accuracy')
