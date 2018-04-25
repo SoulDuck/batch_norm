@@ -66,49 +66,36 @@ def batch_norm_1( _input , is_training , scope_bn):
     return output
 
 
-def batch_norm_2(self , name , x):
+def batch_norm_2(x, n_out, phase_train , scope_bn):
     """
-
-    :param name:
-    :param x:
-    :return:
+    Batch normalization on convolutional maps.
+    Ref.: http://stackoverflow.com/questions/33949786/how-could-i-use-batch-normalization-in-tensorflow
+    Args:
+        x:           Tensor, 4D BHWD input maps
+        n_out:       integer, depth of input maps
+        phase_train: boolean tf.Varialbe, true indicates training phase
+        scope:       string, variable scope
+    Return:
+        normed:      batch-normalized maps
     """
-    p_shape=[x.get_shape()[-1]]
+    with tf.variable_scope(scope_bn):
+        beta = tf.Variable(tf.constant(0.0, shape=[n_out]),
+                                     name='beta', trainable=True)
+        gamma = tf.Variable(tf.constant(1.0, shape=[n_out]),
+                                      name='gamma', trainable=True)
+        batch_mean, batch_var = tf.nn.moments(x, [0,1,2], name='moments')
+        ema = tf.train.ExponentialMovingAverage(decay=0.5)
 
-    with tf.variable_scope(name):
-        beta = tf.get_variable(name='beta', shape=p_shape, dtype=tf.float32, \
-                        initializer=tf.constant_initializer(0.0, tf.float32), trainable=False)
+        def mean_var_with_update():
+            ema_apply_op = ema.apply([batch_mean, batch_var])
+            with tf.control_dependencies([ema_apply_op]):
+                return tf.identity(batch_mean), tf.identity(batch_var)
 
-
-        gamma = tf.get_variable(name='gamma', shape=p_shape, dtype=tf.float32, \
-                    initializer=tf.constant_initializer(1.0, tf.float32), trainable=False)
-
-
-    if self.mode == 'train':
-
-                mean , variance =tf.nn.moments(x , [0,1,2] , name = 'momnets')
-                moving_mean = tf.get_variable('moving_mean',shape=p_shape, dtype=tf.float32 ,\
-                                              initializer=tf.constant_initializer(0.0 , tf.float32))
-                moving_variance = tf.get_variable(name='moving_variance', shape=p_shape , dtype=tf.float32 ,\
-                                                  initializer=tf.constant_initializer(1.0 , tf.float32))
-
-                self._extra_train_ops.append(moving_averages.assign_moving_average(moving_mean , mean , 0.9))
-                self._extra_train_ops.append(moving_averages.assign_moving_average(moving_variance , variance , 0.9))
-
-    else:
-        mean = tf.get_variable(name = 'moving_mean' ,shape = p_shape , dtype = tf.float32 ,\
-                              initializer=tf.constant_initializer(0.0 , tf.float32), trainable=False)
-        variance = tf.get_variable(name = 'moving_variance', shape = p_shape , dtype = tf.float32 , \
-                                   initializer=tf.constant_initializer(1.0 , tf.float32) , trainable=False)
-
-        tf.summary.histogram(mean.op.name , mean)
-        tf.summary.histogram(variance.op.name , variance)
-
-    y=tf.nn.batch_normalization(x, mean , variance , beta , gamma , 0.001)
-    y.set_shape(x.get_shape())
-    return y
-
-
+        mean, var = tf.cond(phase_train,
+                            mean_var_with_update,
+                            lambda: (ema.average(batch_mean), ema.average(batch_var)))
+        normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
+    return normed
 
 def affine(name,x,out_ch ,keep_prob , phase_train):
     with tf.variable_scope(name) as scope:

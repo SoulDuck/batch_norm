@@ -17,8 +17,8 @@ batch_size=60
 ##########################structure##########################
 
 layer , conv1_summary_tensor  = convolution2d('conv1', x_, 64)
-layer = batch_norm_1(layer, phase_train, 'bn0')
 #layer = batch_norm_1(layer, phase_train, 'bn0')
+layer = batch_norm_2(layer, phase_train, 'bn0')
 layer = max_pool('max_pool1' , layer )
 layer , topconv_summary_tensor = convolution2d('top_conv', layer, 128)
 #layer = batch_norm_1(layer, phase_train, 'bn1')
