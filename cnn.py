@@ -51,7 +51,7 @@ def batch_norm_0(x,train_phase,scope_bn):
     bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
     is_training=True,
     trainable=True,
-    reuse=None,
+    reuse=True,
     scope=scope_bn)
     bn_inference = batch_norm(x, decay=0.999, center=True, scale=True,
     is_training=False,
