@@ -101,7 +101,7 @@ for step in range(max_iter):
             val_acc, val_loss, pred = sess.run([accuracy , cost , pred_op ], feed_dict=test_feedDict)
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
-            pred_all.append(pred)
+            pred_all.exnted(pred)
         val_acc_mean = np.mean(np.asarray(val_acc_mean))
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
         summary=tf.Summary(value=[tf.Summary.Value(tag='Test batch_size 1 loss', simple_value=float(val_loss_mean)),
