@@ -51,7 +51,7 @@ def batch_norm_0(x,train_phase,scope_bn):
     bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
     is_training=True,
     trainable=True,
-    reuse=True,
+    reuse=False,
     scope=scope_bn)
     bn_inference = batch_norm(x, decay=0.999, center=True, scale=True,
     is_training=False,
@@ -61,8 +61,8 @@ def batch_norm_0(x,train_phase,scope_bn):
     z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
     return z
 
-def batch_norm_1( _input , is_training):
-    output = batch_norm(_input, scale=True, center=True , is_training=is_training) # 테스트 시에도 학습이 되는건가
+def batch_norm_1( _input , is_training , scope_bn):
+    output = batch_norm(_input, scale=True, center=True , is_training=is_training , scope=scope_bn) # 테스트 시에도 학습이 되는건가
     return output
 
 
