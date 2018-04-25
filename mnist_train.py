@@ -16,7 +16,6 @@ phase_train=tf.placeholder(dtype=tf.bool , name='phase_train')
 batch_size=60
 ##########################structure##########################
 
-
 layer , conv1_summary_tensor  = convolution2d('conv1', x_, 64)
 layer = batch_norm_0(layer, phase_train, 'bn0')
 layer = max_pool('max_pool1' , layer )
@@ -43,6 +42,7 @@ try:
     print 'model was restored!'
 except tf.errors.NotFoundError:
     print 'there was no model'
+
 ########################training##############################
 max_val = 0
 max_iter=7000
@@ -50,7 +50,6 @@ check_point = 50
 batch_size = 60
 f=utils.make_log_txt()
 train_acc=0;train_loss=0;
-
 
 share=len(test_labs)/batch_size
 remainder=len(test_labs)/batch_size
@@ -61,8 +60,6 @@ for step in range(max_iter):
     if step % check_point ==0 :
         # train 과 batch size 을 똑같이 하고 평가합니다
         print 'Train accuracy and loss :', train_acc, train_loss
-        print ''
-        print 'Validation Batch Size : {} '.format(batch_size)
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
                              y_: test_labs[i * batch_size:(i + 1) * batch_size], phase_train: False}
@@ -91,12 +88,12 @@ for step in range(max_iter):
                           tf.Summary.Value(tag='Train batch : {} loss'.format(batch_size), simple_value=float(train_loss)),
                           tf.Summary.Value(tag='Train batch : {} acc'.format(batch_size), simple_value=float(train_acc))])
         writer.add_summary(summary, step)
-        print 'Val accuracy and loss :', val_acc_mean, val_loss_mean
+        print 'Validation Batch Size : {} accuracy : {}  loss : {}'.format(batch_size , val_acc_mean , val_loss_mean)
 
-        val_acc_mean, val_loss_mean, pred_all = [], [], []
         # validation batch size 을 1 로 합니다
-        print ''
-        print 'Validation Batch Size : 1 '
+        val_acc_mean, val_loss_mean, pred_all = [], [], []
+
+
 
         for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i :(i + 1)],
@@ -114,7 +111,7 @@ for step in range(max_iter):
                           tf.Summary.Value(tag='Train batch_size 1  loss', simple_value=float(train_loss)),
                           tf.Summary.Value(tag='Train batch_size 1  acc', simple_value=float(train_acc))])
         writer.add_summary(summary, step)
-        print 'Val accuracy and loss :', val_acc_mean ,val_loss_mean
+        print 'Validation Batch Size : 1 Val accuracy : {} loss : {} '.format(val_acc_mean , val_loss_mean)
 
     utils.show_progress(step,max_iter)
     batch_xs, batch_ys = data.next_batch(train_imgs, train_labs, batch_size)
