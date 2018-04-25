@@ -59,6 +59,7 @@ for step in range(max_iter):
 
     if step % check_point ==0 :
         # train 과 batch size 을 똑같이 하고 평가합니다
+        print ''
         print 'Train accuracy and loss :', train_acc, train_loss
         for i in range(share):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i * batch_size:(i + 1) * batch_size],
@@ -92,9 +93,6 @@ for step in range(max_iter):
 
         # validation batch size 을 1 로 합니다
         val_acc_mean, val_loss_mean, pred_all = [], [], []
-
-
-
         for i in range(len(test_labs)):  # 여기서 테스트 셋을 sess.run()할수 있게 쪼갭니다
             test_feedDict = {x_: test_imgs[i :(i + 1)],
                              y_: test_labs[i :(i + 1)], phase_train: False}
