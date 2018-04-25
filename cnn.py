@@ -66,7 +66,7 @@ def batch_norm_1( _input , is_training , scope_bn):
     return output
 
 
-def batch_norm_2(x, n_out, phase_train , scope_bn):
+def batch_norm_2(x, phase_train , scope_bn):
     """
     Batch normalization on convolutional maps.
     Ref.: http://stackoverflow.com/questions/33949786/how-could-i-use-batch-normalization-in-tensorflow
@@ -79,6 +79,7 @@ def batch_norm_2(x, n_out, phase_train , scope_bn):
         normed:      batch-normalized maps
     """
     with tf.variable_scope(scope_bn):
+        n_out=int(x.get_shape()[-1])
         beta = tf.Variable(tf.constant(0.0, shape=[n_out]),
                                      name='beta', trainable=True)
         gamma = tf.Variable(tf.constant(1.0, shape=[n_out]),
