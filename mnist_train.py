@@ -71,8 +71,13 @@ for step in range(max_iter):
             val_acc_mean.append(val_acc)
             val_loss_mean.append(val_loss)
             pred_all.extend(preds)
+        test_feedDict = {x_: test_imgs[i * batch_size:],
+                         y_: test_labs[i * batch_size:], phase_train: False}
+        val_acc, val_loss, preds = sess.run([accuracy, cost, pred_op], feed_dict=test_feedDict)
         print np.shape(pred_all)
+
         val_acc_mean = utils.get_acc(test_labs, pred_all)
+
         exit()
         print val_acc_mean
         val_loss_mean = np.mean(np.asarray(val_loss_mean))
