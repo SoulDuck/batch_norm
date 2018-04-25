@@ -22,7 +22,7 @@ layer = batch_norm_2(layer, phase_train, 'bn0')
 layer = max_pool('max_pool1' , layer )
 layer , topconv_summary_tensor = convolution2d('top_conv', layer, 128)
 layer = batch_norm_2(layer, phase_train, 'bn1')
-layer , fc_summary_tensor = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
+layer , fc_summary_tensor   = affine('fully_connect', layer, 1024 ,keep_prob=0.5 ,phase_train= phase_train)
 #layer = batch_norm_1(layer, phase_train, 'bn2')
 y_conv=logits('end_layer' , layer , n_classes)
 
@@ -30,7 +30,7 @@ merged = tf.summary.merge_all()
 
 #############################################################
 #cam = get_class_map('gap', top_conv, 0, im_width=image_width)
-pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 0.1)
+pred_op, pred_cls, cost, train_op, correct_pred, accuracy = algorithm(y_conv, y_, 0.01)
 writer=tf.summary.FileWriter(logdir='./logs')
 writer.add_graph(graph = tf.get_default_graph())
 saver = tf.train.Saver()
